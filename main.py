@@ -18,3 +18,137 @@ def connect_to_postgres():
     except psycopg2.Error as e:
         print(f"Error connecting to PostgreSQL: {e}")
         return None
+        @app.route('/temp_points', methods=['GET'])
+def get_temp_points():
+    connection = connect_to_postgres()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            # Define table name
+            table_name = 'idwtemppoints_in_sde'
+
+            sql_query = f"SELECT shape FROM {table_name};"
+            cursor.execute(sql_query)
+            rows = cursor.fetchall()
+
+            features = []
+            for row in rows:
+                try:
+                    geojson = wkb_to_geojson(row[0])
+                    features.append({"type": "Feature", "geometry": geojson})
+                except Exception as e:
+                    print(f"Error converting geometry: {e}")
+
+            cursor.close()
+            connection.close()
+
+            return jsonify({"type": "FeatureCollection", "features": features})
+        except psycopg2.Error as e:
+            print(f"Error executing SQL query: {e}")
+            return jsonify({"error": "Internal Server Error"}), 500
+    else:
+        return jsonify({"error": "Database Connection Error"}), 500
+
+@app.route('/temp_accuracy', methods=['GET'])
+def get_temp_accuracy():
+    connection = connect_to_postgres()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            # Define table name
+            table_name = 'accuracyassessmenttable'
+
+            sql_query = f"SELECT shape FROM {table_name};"
+            cursor.execute(sql_query)
+            rows = cursor.fetchall()
+
+            features = []
+            for row in rows:
+                try:
+                    geojson = wkb_to_geojson(row[0])
+                    features.append({"type": "Feature", "geometry": geojson})
+                except Exception as e:
+                    print(f"Error converting geometry: {e}")
+
+            cursor.close()
+            connection.close()
+
+            return jsonify({"type": "FeatureCollection", "features": features})
+        except psycopg2.Error as e:
+            print(f"Error executing SQL query: {e}")
+            return jsonify({"error": "Internal Server Error"}), 500
+    else:
+        return jsonify({"error": "Database Connection Error"}), 500
+
+@app.route('/elev_points', methods=['GET'])
+def get_elev_points():
+    connection = connect_to_postgres()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            # Define table name
+            table_name = 'idwelevationpoints_in_sde'
+
+            sql_query = f"SELECT shape FROM {table_name};"
+            cursor.execute(sql_query)
+            rows = cursor.fetchall()
+
+            features = []
+            for row in rows:
+                try:
+                    geojson = wkb_to_geojson(row[0])
+                    features.append({"type": "Feature", "geometry": geojson})
+                except Exception as e:
+                    print(f"Error converting geometry: {e}")
+
+            cursor.close()
+            connection.close()
+
+            return jsonify({"type": "FeatureCollection", "features": features})
+        except psycopg2.Error as e:
+            print(f"Error executing SQL query: {e}")
+            return jsonify({"error": "Internal Server Error"}), 500
+    else:
+        return jsonify({"error": "Database Connection Error"}), 500
+
+@app.route('/elev_accuracy', methods=['GET'])
+def get_elev_accuracy():
+    connection = connect_to_postgres()
+    if connection:
+        try:
+            cursor = connection.cursor()
+
+            # Define table name
+            table_name = 'accuracyelevation'
+
+            sql_query = f"SELECT shape FROM {table_name};"
+            cursor.execute(sql_query)
+            rows = cursor.fetchall()
+
+            features = []
+            for row in rows:
+                try:
+                    geojson = wkb_to_geojson(row[0])
+                    features.append({"type": "Feature", "geometry": geojson})
+                except Exception as e:
+                    print(f"Error converting geometry: {e}")
+
+            cursor.close()
+            connection.close()
+
+            return jsonify({"type": "FeatureCollection", "features": features})
+        except psycopg2.Error as e:
+            print(f"Error executing SQL query: {e}")
+            return jsonify({"error": "Internal Server Error"}), 500
+    else:
+        return jsonify({"error": "Database Connection Error"}), 500
+
+def wkb_to_geojson(wkb):
+    geometry = loads(wkb, hex=True)
+    return geometry.__geo_interface__
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
