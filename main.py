@@ -6,7 +6,7 @@ from shapely.wkb import loads
 dbname = 'gis5572'
 user = 'postgres'
 password = 'sami@2010'
-host = '35.202.65.52'  # Cloud DB Public IP address
+host = '34.31.152.38'  # Cloud DB Public IP address
 port = '5432'
 
 app = Flask(__name__)
@@ -18,7 +18,8 @@ def connect_to_postgres():
     except psycopg2.Error as e:
         print(f"Error connecting to PostgreSQL: {e}")
         return None
-        @app.route('/temp_points', methods=['GET'])
+
+@app.route('/temp_points', methods=['GET'])
 def get_temp_points():
     connection = connect_to_postgres()
     if connection:
@@ -58,7 +59,7 @@ def get_temp_accuracy():
             cursor = connection.cursor()
 
             # Define table name
-            table_name = 'accuracyassessmenttable'
+            table_name = 'idw_mn_maxtemp_point'
 
             sql_query = f"SELECT shape FROM {table_name};"
             cursor.execute(sql_query)
@@ -122,7 +123,7 @@ def get_elev_accuracy():
             cursor = connection.cursor()
 
             # Define table name
-            table_name = 'accuracyelevation'
+            table_name = 'ordkrig_elevationpoints_in_sde'
 
             sql_query = f"SELECT shape FROM {table_name};"
             cursor.execute(sql_query)
