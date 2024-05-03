@@ -21,7 +21,7 @@ def connect_to_postgres():
         return None
 
 @app.route('/et_points', methods=['GET'])
-def get_temp_points():
+def get_et_points():
     connection = connect_to_postgres()
     if connection:
         with connection:
@@ -48,7 +48,7 @@ def get_temp_points():
         return jsonify({"error": "Database Connection Error"}), 500
 
 @app.route('/sep_et_points', methods=['GET'])
-def get_temp_points():
+def get_sepet_points():
     connection = connect_to_postgres()
     if connection:
         with connection:
