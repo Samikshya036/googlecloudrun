@@ -6,7 +6,7 @@ import os
 # PostGIS database connection details
 dbname = os.getenv('DB_NAME', 'gis5572')
 user = os.getenv('DB_USER', 'postgres')
-password = os.getenv('DB_PASSWORD')
+password = os.getenv('DB_PASSWORD', 'sami@2010')
 host = os.getenv('DB_HOST', '34.31.152.38')
 port = os.getenv('DB_PORT', '5432')
 
