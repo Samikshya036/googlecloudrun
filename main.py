@@ -20,7 +20,7 @@ def connect_to_postgres():
         return None
 
 @app.route('/et_points', methods=['GET'])
-def get_temp_points():
+def get_et_points():
     connection = connect_to_postgres()
     if connection:
         try:
