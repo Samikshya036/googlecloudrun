@@ -27,7 +27,7 @@ def get_temp_points():
         with connection:
             with connection.cursor() as cursor:
                 try:
-                    table_name = 'et2023_idw_points'
+                    table_name = 'et2023_idw_point'
                     sql_query = f"SELECT shape FROM {table_name};"
                     cursor.execute(sql_query)
                     rows = cursor.fetchall()
