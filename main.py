@@ -46,6 +46,33 @@ def get_temp_points():
                     return jsonify({"error": "Internal Server Error"}), 500
     else:
         return jsonify({"error": "Database Connection Error"}), 500
+
+@app.route('/sep_et_points', methods=['GET'])
+def get_temp_points():
+    connection = connect_to_postgres()
+    if connection:
+        with connection:
+            with connection.cursor() as cursor:
+                try:
+                    table_name = 'etsep2023_idw_point'
+                    sql_query = f"SELECT shape FROM {table_name};"
+                    cursor.execute(sql_query)
+                    rows = cursor.fetchall()
+
+                    features = []
+                    for row in rows:
+                        try:
+                            geojson = wkb_to_geojson(row[0])
+                            features.append({"type": "Feature", "geometry": geojson})
+                        except Exception as e:
+                            app.logger.error(f"Error converting geometry: {e}")
+
+                    return jsonify({"type": "FeatureCollection", "features": features})
+                except psycopg2.Error as e:
+                    app.logger.error(f"Error executing SQL query: {e}")
+                    return jsonify({"error": "Internal Server Error"}), 500
+    else:
+        return jsonify({"error": "Database Connection Error"}), 500
         
 def wkb_to_geojson(wkb):
     geometry = loads(wkb)  # Assuming binary format
